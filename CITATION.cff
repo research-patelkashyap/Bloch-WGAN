@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite our paper."
+title: "Bloch-Wasserstein GAN for Quantum State Learning"
+authors:
+  - family-names: Patel
+    given-names: Kashyap
+type: software
+license: MIT
+url: "https://github.com/research-patelkashyap/Bloch-WGAN"
+preferred-citation:
+  type: conference-paper
+  title: "Bloch-Wasserstein Generative Adversarial Network for Quantum State Learning"
+  authors:
+    - family-names: Patel
+      given-names: Kashyap
+  year: 2025
