@@ -12,7 +12,7 @@
 
 Bloch-WGAN is a hybrid quantum–classical GAN for learning unknown pure and mixed quantum states. It sidesteps the two main bottlenecks of existing Quantum WGANs (QWGAN) — semidefinite programming (SDP) and matrix-exponential regularisation — by working entirely in the generalized Bloch vector space.
 
-**Key idea:** embed any *n*-qubit state into $ \mathbb{R}^D $ via Pauli expectation values, then apply the classical Wasserstein-1 objective with a linear critic. The quantum generator is a parameterized quantum circuit (PQC); the discriminator is a single weight vector with a norm-clipping Lipschitz constraint.
+**Key idea:** embed any *n*-qubit state into $\mathbb{R}^D$ via Pauli expectation values, then apply the classical Wasserstein-1 objective with a linear critic. The quantum generator is a parameterized quantum circuit (PQC); the discriminator is a single weight vector with a norm-clipping Lipschitz constraint.
 
 ---
 
@@ -53,31 +53,31 @@ trainable parameters in total.
 
 ![Pure state architecture](./diagrams/pure.jpeg)
 
-The quantum generator $U(\theta)$ transforms the reference state $ |\psi_0\rangle $ into a generated quantum state $ |\psi_{\text{fake}}\rangle $. This state is mapped to its Bloch vector representation $ r_{\text{fake}} = r(|\psi_{\text{fake}}\rangle) $, which is then compared with the target Bloch vector $ r_{\text{real}} = r(|\psi_{\text{real}}\rangle) $ using a classical linear discriminator parameterized by $ w $. The resulting scalar output defines the Wasserstein loss. Solid arrows represent the forward propagation through the model, while dashed arrows indicate gradient flow used to update the discriminator parameters via $ \nabla_w L_{\text{disc}} $ and the generator parameters via $ \nabla_\theta L_{\text{gen}} $.
+The quantum generator $U(\theta)$ transforms the reference state $|\psi_0\rangle$ into a generated quantum state $|\psi_{\text{fake}}\rangle$. This state is mapped to its Bloch vector representation $r_{\text{fake}} = r(|\psi_{\text{fake}}\rangle)$, which is then compared with the target Bloch vector $r_{\text{real}} = r(|\psi_{\text{real}}\rangle)$ using a classical linear discriminator parameterized by $w$. The resulting scalar output defines the Wasserstein loss. Solid arrows represent the forward propagation through the model, while dashed arrows indicate gradient flow used to update the discriminator parameters via $\nabla_w L_{\text{disc}}$ and the generator parameters via $\nabla_\theta L_{\text{gen}}$.
 
 ### Mixed State
 
 ![Mixed state architecture](./diagrams/mixed.jpeg)
 
-The mixed-state Bloch-WGAN employs a collection of parameterized quantum circuits $ {U_i(\theta_i)}_{i=1}^{r} $, each preparing a pure quantum state $ |\psi_i\rangle $. Their corresponding density matrices $ \rho_i = |\psi_i\rangle\langle\psi_i| $ are combined using a learnable softmax probability distribution
+The mixed-state Bloch-WGAN employs a collection of parameterized quantum circuits ${U_i(\theta_i)}_{i=1}^{r}$, each preparing a pure quantum state $|\psi_i\rangle$. Their corresponding density matrices $\rho_i = |\psi_i\rangle\langle\psi_i|$ are combined using a learnable softmax probability distribution
 
 $$
 p_i = \frac{e^{\ell_i}}{\sum_j e^{\ell_j}},
 $$
 
-where $ {\ell_i} $ are trainable mixing logits. The generator output is therefore
+where ${\ell_i}$ are trainable mixing logits. The generator output is therefore
 
 $$
 \rho_{\text{fake}} = \sum_{i=1}^{r} p_i \rho_i.
 $$
 
-The Bloch vector representations $ r_{\text{fake}} $ and $ r_{\text{real}} $ are evaluated by a classical linear discriminator $ w $. The discriminator objective includes a quadratic regularization term $ \lambda |w|_2^2 $, followed by a unit-norm projection step
+The Bloch vector representations $r_{\text{fake}}$ and $r_{\text{real}}$ are evaluated by a classical linear discriminator $w$. The discriminator objective includes a quadratic regularization term $\lambda |w|_2^2$, followed by a unit-norm projection step
 
 $$
 w \leftarrow \frac{w}{\max(1,|w|_2)}.
 $$
 
-Solid arrows denote the forward computational flow, while dashed arrows represent backpropagation. During training, the generator update jointly optimizes both the circuit parameters $ \theta_i $ and the mixing logits $ \ell_i $.
+Solid arrows denote the forward computational flow, while dashed arrows represent backpropagation. During training, the generator update jointly optimizes both the circuit parameters $\theta_i$ and the mixing logits $\ell_i$.
 
 ---
 
